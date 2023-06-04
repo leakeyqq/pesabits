@@ -77,6 +77,7 @@ class UpdatePrices{
     }
     
 }
+//cool
 $obj = new UpdatePrices();
 $pdo = null;
 ?>
