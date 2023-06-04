@@ -1,0 +1,71 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    text-align: center;
+    background-color: rgb(205, 216, 212);
+}
+form{
+    padding: 20px;
+    margin-top: 40px;
+    display: inline-block;
+    background-color: rgb(205, 216, 212);
+    width: 500px;
+    border: 8px solid rgb(0, 0, 0,0.3);
+    border-radius: 40px;
+}
+form h1{
+    font-size: 35px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgb(6, 10, 93);
+    font-weight: 800;
+}
+input{
+    display: block;
+    margin: auto;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+form ::placeholder{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+input[type=button], input[type=submit]{
+    background-color: rgb(28, 120, 5);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 30px;
+}
+#google-login{
+    background-color: black;
+    color: white;
+}
+form a{
+    text-decoration: none;
+    font-size: 18px;
+    color: rgb(84, 11, 11);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+@media screen and (max-width:500px) {
+    body{
+        background-color: rgb(205, 216, 212);
+    }
+    form{
+        padding: 10px;
+        width: 100vw;
+        margin: 0;
+        border: none;
+    }
+    form h1{
+        font-size: 30px;
+        margin-top: 10px;
+    }
+    form ::placeholder{
+        font-size: 15px;
+    }
+}

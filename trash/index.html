@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>Borrow - Pesabits</title>
+        <link rel="stylesheet" href="styles.css">
+        <meta name="description" content="Apply for a crypto backed loan in kenya">
+        <script type="text/javascript">
+            function getInterest(){
+                let dollarUSLocale = Intl.NumberFormat('en-US');
+                //Get the form 
+                var form = document.getElementById("loan-form");
+                var loanPayment = form.elements["payback"];
+                var interestEarned = form.elements["gainedInterest"];
+                const loanInterest = 0.03;
+                //var loantaken = form.elements["loantaken"]
+                
+                var principal = parseInt(form.elements["loanAmount"].value);
+                var period = parseInt(form.elements["loanPeriod"].value);
+                
+                if(isNaN(principal * loanInterest * period)){
+                    loanPayment.value = 0;
+                    interestEarned.value = 0;
+                    //loantaken.value = 0;
+                }else{
+                    loanPayment.value = dollarUSLocale.format( Math.ceil(principal * Math.pow(1 + loanInterest, period)));
+                    interestEarned.value = dollarUSLocale.format(Math.ceil(principal * Math.pow(1 + loanInterest, period)) - principal);
+                    //loantaken.value = dollarUSLocale.format(principal);
+                }
+            }
+            function getSavingsInterest(){
+                let dollarUSLocale = Intl.NumberFormat('en-US');
+                var form = document.getElementById("savings-form");
+
+                var savingsPrincipal = parseInt(form.elements["savingsAmount"].value);
+                
+                
+                var savingsInterest = form.elements["savingsInterest"]; 
+                var savingsPayback = form.elements["savingsPayback"]; 
+                const savingsRate = 0.15;  
+                //Savings duration
+                const savingsTerm = 1
+                if(isNaN(savingsPrincipal)){
+                    savingsInterest.value = 0;
+                    savingsPayback.value = 0;
+                }else{
+                    savingsInterest.value = dollarUSLocale.format( Math.floor(savingsPrincipal * savingsRate * 1));
+                    savingsPayback.value = dollarUSLocale.format(Math.floor(savingsPrincipal * savingsRate * 1) + savingsPrincipal)
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Pesabits</h1>
+            <h3>Kenyan Crypto backed loans</h3>
+        </header>
+        <button class="products" onclick="showLoansForm()">Borrow </button>
+        <button class="products" onclick="showSavingsForm()">Locked Savings 15%</button>
+        <form class="loan-calculator" id="loan-form" oninput="getInterest()" method="post">
+            <div class="form-instructions">
+                <p><b>Borrow at 0.2% daily interest</b></p>
+            </div>
+          <label for="loan-amount">Amount to borrow in Kshs.</label><br>
+            <input type="text" id="loan-amount" name="loanAmount" placeholder="Kshs 20,000" inputmode="numeric" autocomplete="off">
+          
+            
+           <!-- <br><br><label for="loanterm">Loan term</label> <output id="termoutput">3</output><span> month(s)</span><br>
+
+
+           
+<input type="range" name="loanPeriod" id="loanterm" value="3" min="1" max="6" oninput="termoutput.value = loanterm.value"> -->
+
+            <br><br><label for="coin">Coin to use as collateral</label><br>
+            <input list="available-coins" id="coin" name="collateral-coin" placeholder="Select" min="1" max="6" autocomplete="off">
+            <datalist id="available-coins">
+                <option value="Bitcoin - BTC"></option>
+                <option value="Ethereum - ETH"></option>
+                <option value="BNB"></option>
+                <option value="XRP"></option>
+                <option value="ADA"></option>
+                <option value="Dogecoin - DOGE"></option>
+                <option value="Polygon - MATIC"></option>
+                <option value="Solana - SOL"></option>
+                <option value="Polkadot - DOT"></option>
+                <option value="Litecoin - LTC"></option>
+                <option value="Shiba Inu - SHIB"></option>
+            </datalist>
+            <br><br><label for="loanltv">Loan to value(LTV) ratio </label><output id="ltvoutput">50</output><span>%</span><br>
+<input type="range" name="loan-ltv" id="loanltv" value="50" min="30" max="75" step="1" oninput="ltvoutput.value = loanltv.value">
+            <div class="calculation-results" id="loans-calculations">
+                <p>Collateral needed 0.001 BTC</p><br>
+                <!--<p class="hidden">Borrowed amount Kshs <output name="loantaken">0</output></p>
+                <p>Interest Kshs <output name="gainedInterest">0</output></p>
+                <p>Amount to pay back Kshs <output name="payback">0</output></p>-->
+                <p>The interest is calculated on your remaining balance. The earlier you repay your loan the lesser interest it will incur.</p>
+                <p>The loan term is unlimited. You can payback the loan at anytime.</p>
+            </div>
+            <input type="button" id="borrow" value="Proceed to borrow">
+            <script>
+                function showResults(){
+                        const results = document.getElementById("loans-calculations");
+                        const displayResults = document.getElementById("get-interest");
+                        results.style.display = "block";
+                }
+            </script>
+        </form>
+
+
+        <form class="loan-calculator" id="savings-form" oninput="getSavingsInterest()" method="post">
+            <div class="form-instructions">
+                <p><b>Save with us and earn 15% Int per year</b></p>
+            </div>
+          <label for="savings-amount">Amount to save in Kshs.</label><br>
+            <input type="text" id="savings-amount" name="savingsAmount" placeholder="Kshs 80,000" inputmode="numeric"><br><br>
+          <label for="phoneNumber">Enter Mpesa number</label><br>
+          <input type="tel" id="phoneNumber" name="mpesa-no" placeholder="0712345678" inputmode="numeric">
+           <br><br> 
+           
+            <div class="calculation-results" id="loans-calculations">
+                <p>Note: This deposit won't be available for withdrawal until 12 months end.</p><br>
+                <p>Interest Kshs <output name="savingsInterest">0</output></p>
+                <p>Amount to receive back Kshs <output name="savingsPayback">0</output></p>
+            </div>
+            <input type="button" id="saveNow" value="Proceed to pay">
+
+            </script>
+        </form>
+    </body>
+</html>

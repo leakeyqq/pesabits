@@ -1,0 +1,21 @@
+<?php
+class MyClass {
+    private $name;
+
+    // Constructor
+    public function __construct($name) {
+        $this->name = $name;
+        echo "Constructor called with name: " . $this->name . "\n";
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+}
+
+// Create an instance of MyClass
+$obj = new MyClass("John");
+
+// Call a method on the object
+echo "Name: " . $obj->getName();
+?>
