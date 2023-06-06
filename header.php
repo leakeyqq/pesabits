@@ -13,7 +13,7 @@
 <?php if(isset($_SESSION['user'])){?>
 <a href="index.php?logout='1'">Log out</a>
 <?php }else{?>
-<a href="/pesabits/forms/login.php">Login/Register</a>
+<a href="forms/login.php">Login/Register</a>
 <?php
 }?>
 

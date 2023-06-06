@@ -7,11 +7,29 @@ class UpdatePrices{
 
     //This function fetches all the available digital currencies from the db
     public function __construct(){
-        require '../forms/dbconnections/connection.php';
+        //require '../forms/dbconnections/connection.php';
+      $host = 'localhost';
+      $db   = 'pesa_pesabits';
+      $user = 'pesa_root';
+      $pass = 'root';
+      //$port = "3306";
+      $charset = 'utf8mb4';
+
+      $options = [
+          \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+          \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+          \PDO::ATTR_EMULATE_PREPARES   => false,
+      ];
+      $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+      try {
+           $pdo = new \PDO($dsn, $user, $pass, $options);
+      } catch (\PDOException $e) {
+           throw new \PDOException($e->getMessage(), (int)$e->getCode());
+      }
 
         $array = array(); // Initialize an empty array
 
-            // Execute the SELECT quuery
+            // Execute the SELECT query
             $query = "SELECT Token_short_name FROM available_digital_currencies";
             $stmt = $pdo->query($query);
 

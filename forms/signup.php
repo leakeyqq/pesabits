@@ -11,7 +11,8 @@ require 'credentials.php';
     <title>Register - Pesabits</title>
 </head>
 <body>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" autocomplete="on">
+    <!--<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" autocomplete="on">-->
+       <form action="credentials.php" method="post" autocomplete="on">
         <a href="../index.php"><h1>Pesabits</h1></a>
         <br>
         <input type="button" id="google-login" value="Continue with GOOGLE">
