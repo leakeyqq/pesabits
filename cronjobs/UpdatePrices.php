@@ -11,7 +11,7 @@ class UpdatePrices{
 
         $array = array(); // Initialize an empty array
 
-            // Execute the SELECT query
+            // Execute the SELECT quuery
             $query = "SELECT Token_short_name FROM available_digital_currencies";
             $stmt = $pdo->query($query);
 
@@ -77,6 +77,7 @@ class UpdatePrices{
     }
     
 }
+//cool
 $obj = new UpdatePrices();
 $pdo = null;
 ?>
