@@ -56,8 +56,9 @@ if (isset($_GET['logout'])) {
     </head>
     <body>
         <?php
-        include 'header.php';
-        include 'others/getKshsRate.php';
+        require 'header.php';
+        require 'others/getKshsRate.php';
+        require 'others/savingOptions.php';
         ?>
         <div class="front-introduction">
             <!--<p>Borrow money for your day to day activites</p>-->
@@ -214,7 +215,7 @@ if (isset($_GET['logout'])) {
                 <p>After the lock period finishes you will be able to withdraw your money plus interest.</p>
             </div>
             </div>
-        <form class="loan-calculator" id="savings-form" method="post" oninput="updateSavings()">
+        <form class="loan-calculator" id="savings-form" method="post"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="form-instructions">
                 <p><b>Locked savings</b></p>
             </div>
@@ -222,17 +223,39 @@ if (isset($_GET['logout'])) {
             <input type="text" id="savings-amount" name="savingsAmount" placeholder="Kshs 80,000" inputmode="numeric" value="0"><br><br>
             <label for="duration">Select lock duration</label>
             <select name="loan-duration" id="duration">
-                <option value="360">12 months at 20% APY</option>
-                <option value="180">6 months at 15% APY</option>
+          <?php
+          foreach($rows as $row){
+            echo "<option value=".$row['Period_months'].">".$row['Period_months']." months at ".$row['APY']." APY"."</option>";
+          }
+          ?>
             </select>
-            <br><br><label for="profit">Interest to earn Kshs <output name="profit" for="profit">0</output></label>
-            <br><br><label for="amountBack">Amount to receive back Kshs <output name="z" for="amount clients">0</output></label>
-            
-
             <br><br>
+            <div class="collateral-needed">
+                <span id="savingsOutput"></span>
+            </div>
+          
             <input type="button" id="saveNow" value="Proceed to pay">
 
         </form>
+        <script type="text/javascript">
+                     $(document).ready(function(){
+                                  $("#duration").change(function(){
+                                  var savingsDuration = $(this).val();
+                                  $.ajax({
+                                    url:"others/savingOptions.php",
+                                    method: "POST",
+                                    data:{
+                                      savings_amount:$('#savings-amount').val(),
+                                      savings_duration: savingsDuration
+                                  },
+                                    datatype: "text",
+                                    success:function(html){
+                                      $('#savingsOutput').html(html);
+                                    }
+                                  });
+                          });
+                    });
+        </script>
         
     </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 //Declaring functions
 
+
 function roundOffsecurity($coins_needed,$collateral_amount){
   //check 1 kshs is worth how many coins
   $_1kshs_token = $coins_needed/$collateral_amount;
@@ -86,7 +87,8 @@ function roundOffsecurity($coins_needed,$collateral_amount){
 
 if(!empty($_POST["loan_amount"])){
   // TODO Kshs rate to be updated periodically;
-  $kshs_rate = 137; 
+  require 'others/getKshsRate.php';
+  $kshs_rate = getShsRate(); 
   //These are inputs from the form
   $loan_amount = $_POST["loan_amount"];
   $coin_type = $_POST["coin_chosen"];

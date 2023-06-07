@@ -1,8 +1,8 @@
 <?php
-require '../forms/dbconnections/connection.php';
-
 
 // Prepare the query
+function getShsRate(){
+require 'forms/dbconnections/connection.php';
 $query = "SELECT Kshs FROM exchange_rate";
 
 // Prepare the statement
@@ -16,6 +16,7 @@ $statement->execute();
 $dataItem = $statement->fetchColumn();
 
 // Output the result
-echo $dataItem;
+return $dataItem;
+}
 
 ?>
