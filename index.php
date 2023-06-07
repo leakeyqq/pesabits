@@ -57,6 +57,7 @@ if (isset($_GET['logout'])) {
     <body>
         <?php
         include 'header.php';
+        include 'others/getKshsRate.php';
         ?>
         <div class="front-introduction">
             <!--<p>Borrow money for your day to day activites</p>-->
