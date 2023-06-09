@@ -19,39 +19,6 @@ if (isset($_GET['logout'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/nav_style.css">
         <script src="js/jquery-3.7.0.js"></script>
-
-        <script type="text/javascript">
-                function updateSavings() {
-                    let dollarUSLocale = Intl.NumberFormat('en-US');
-                    //get form
-                    var form = document.getElementById("savings-form");
-                    //get output
-                    var out = form.elements["z"];
-                    var profit = form.elements["profit"];
-                    //get two numbers
-                    var deposit = parseInt(form.elements["savingsAmount"].value);
-                    var duration = parseInt(form.elements["loan-duration"].value);
-                    var interest;
-                    if(duration == 360){
-                        interest = 20;
-                    }else if(duration == 180){
-                        interest = 15;
-                    }else{
-                        interest = 11;
-                    }
-                    var amountBack = deposit + (interest/100 * deposit * duration/360);
-                    var interest_amount = interest/100 * deposit * duration/360;
-                    if(isNaN(amountBack)){
-                        out.value = 0;
-                        profit.value = 0
-                    }else{
-                        interest_amount = interest_amount.toFixed(0);
-                        profit.value = dollarUSLocale.format(interest_amount);
-                        amountBack = amountBack.toFixed(0);
-                        out.value = dollarUSLocale.format(amountBack);   
-                    }
-            }
-</script>
 <script src="~/Scripts/autoNumeric/autoNumeric.min.js" type="text/javascript"></script>
     </head>
     <body>
@@ -59,10 +26,12 @@ if (isset($_GET['logout'])) {
         require 'header.php';
         require 'others/getKshsRate.php';
         require 'others/savingOptions.php';
+        require 'others/fetchLTVs.php';
+        require 'others/fetchCoins.php';
         ?>
         <div class="front-introduction">
             <!--<p>Borrow money for your day to day activites</p>-->
-            <p>Use your Bitcoin to get a loan</p>
+            <p>Use your Bitcoin to get a Ksh loan</p>
         <div class="features-box">
         <div class="features-link" ><a href="#loanformlink">Borrow</a></div>
         <div class="features-link"><a href="#savingsformlink">Earn</a></div>
@@ -91,34 +60,43 @@ if (isset($_GET['logout'])) {
                 <p>The loan is processed instantly and you receive money in your Mpesa account.</p>
             </div>
             <div class="procedure">
-                <h4>Pay back</h4>
-                <p>There is no loan duration. You can payback anytime you want.</p>
-                <P>The interest is calculated monthly on your remaining loan balance.</P>
+                <h4>Loan repayment</h4>
+                <p>If you repay in the first 30 days you will pay <b>zero interest fees</b>.</b></p>
+                <p>Then onwards the loan will be earning a 0.3% Interest daily on your remaining loan balance.</p>
+                <p>There is no loan duration. You can payback anytime you wish.</p>
             </div>
             </a>
         </div>
         
         <form class="loan-calculator" id="loan-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <br><div class="form-instructions">
-                <p><b>Borrow at 5% monthly interest</b></p>
+                <p><b>Loan form</b></p>
             </div>
           <label for="loan-amount">Amount to borrow in Kshs.</label><br>
-            <input type="text" id="loanAmount" name="loanAmount" placeholder="Kshs 20,000" inputmode="numeric" autocomplete="off" value="0">
+            <input type="number" id="loanAmount" name="loanAmount" placeholder="Kshs 20,000" inputmode="numeric" autocomplete="off" value="0">
         
             <br><br><label for="coin">Coin to use as collateral</label><br>
             
             <select name="collateral-coin" id="coin">
-                <option value="BTCUSDT">Bitcoin BTC</option>
-                <option value="ETHUSDT">Ethereum ETH</option>
-                <option value="DOGEUSDT">Dogecoin DOGE</option>
-                <option value="LTCUSDT">Litecoin LTC</option>
-                <option value="SHIBUSDT">Shiba Inu SHIB</option>
+              <?php
+              foreach($this_coins as $row){
+               echo "<option value='".$row['Token_short_name']."'>".$row['Token_full_name']."</option>";
+              }
+              ?>
+
             </select>
 
-            <br><br><label for="loanltv">LTV ratio </label><output id="ltvoutput">50</output><span style="color: rgb(0, 0, 0);">%. <a href="#aboutltv">Learn more</a></span><br>
-<input type="range" name="loan-ltv" id="loanltv" value="50" min="30" max="50" step="1" oninput="ltvoutput.value = loanltv.value">
+
+            <?php
+                foreach($this_rows as $row){
+               echo "<br><br><label for='loanltv'>LTV ratio </label><output id='ltvoutput'>".$row['Default_value']."</output><span style='color: rgb(0, 0, 0);'>%. <a href='#aboutltv'>Learn more</a></span><br>";
+
+             echo "<input type='range' name='loan-ltv' id='loanltv' value='".$row['Default_value']."' min='".$row['Min']."' max='".$row['Max']."' step='1' oninput='ltvoutput.value = loanltv.value'>";
+            }
+            ?>
+
 <br><br><div class="collateral-needed">
-    <!--<p>Collateral needed 0.001 Bitcoin BTC.</p>-->
+
     <span id="collateralNeeded"></span>
 </div>
             <input type="button" id="borrow" value="Proceed to borrow">
@@ -189,14 +167,14 @@ if (isset($_GET['logout'])) {
             <h4>What is Loan to Value(LTV) ratio</h4>
             <p>It is calculated by dividing the loan amount by the amount of collateral.</p>
             <!--<p>Choosing a high LTV when borrowing is risky.</p>-->
-            <p>The higher the LTV ratio you pick the lesser collateral you will deposit.</p>
+            <p>The higher the LTV you pick the lesser collateral you will deposit.</p>
             </a>
         </div>
         <div class="procedure">
             <h4>LTV alerts </h4>
             <p>Within the cause of the debt period the LTV ratio can go up or down due to fluctuations in the price of your collateral asset.</p>
             <p>Incase the LTV ratio rises up to 70%. We will alert you to add more collateral or repay some part of the loan to bring the LTV ratio down.</p>
-            <p>If the LTV ratio reaches 80% we will swap your collateral asset into a stable coin like BUSD.</p>
+            <p>If the LTV ratio reaches 80% we will swap your collateral asset into a stable coin like BUSD to prevent it from loosing more value.</p>
         </div>
         </div>
         <hr>
@@ -220,7 +198,7 @@ if (isset($_GET['logout'])) {
                 <p><b>Locked savings</b></p>
             </div>
           <label for="savings-amount">Amount to save in Kshs.</label><br>
-            <input type="text" id="savings-amount" name="savingsAmount" placeholder="Kshs 80,000" inputmode="numeric" value="0"><br><br>
+            <input type="number" id="savings-amount" name="savingsAmount" placeholder="Kshs 80,000" inputmode="numeric" value="0"><br><br>
             <label for="duration">Select lock duration</label>
             <select name="loan-duration" id="duration">
           <?php
@@ -247,6 +225,22 @@ if (isset($_GET['logout'])) {
                                     data:{
                                       savings_amount:$('#savings-amount').val(),
                                       savings_duration: savingsDuration
+                                  },
+                                    datatype: "text",
+                                    success:function(html){
+                                      $('#savingsOutput').html(html);
+                                    }
+                                  });
+                          });
+
+                          $("#savings-amount").keyup(function(){
+                                  var savingsAmount = $(this).val();
+                                  $.ajax({
+                                    url:"others/savingOptions.php",
+                                    method: "POST",
+                                    data:{
+                                      savings_amount:savingsAmount,
+                                      savings_duration: $('#duration').val()
                                   },
                                     datatype: "text",
                                     success:function(html){

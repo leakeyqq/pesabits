@@ -270,7 +270,28 @@ input[type=button]:hover, input[type=submit]:hover{
 .hidden{
     display: none;
 }
+    /* Hide the default arrows for number input */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
+    input[type="number"] {
+      /* Additional styles for the input field */
+      /* Add your own styles here */
+    }
+ /* Customize the appearance of the select element */
+ select {
+  padding-right: 25px; /* Add extra padding for the arrow */
+  background-image: url('../images/drop4.png'); /* Custom arrow image */
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 20px 20px; /* Adjust the size of the arrow image */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 @media screen and (max-width:500px){
   .front-introduction p{
     font-size: 35px;

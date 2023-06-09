@@ -1,28 +1,9 @@
 <?php
-//include 'forms/dbconnections/connection.php';
-$host = '127.0.0.1';
-$db   = 'pesabits';
-$user = 'root';
-$pass = '';
-$port = "3307";
-$charset = 'utf8mb4';
-
-$options = [
-    \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
-    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-    \PDO::ATTR_EMULATE_PREPARES   => false,
-];
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset;port=$port";
-try {
-     $pdo = new \PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
-
+include 'dbconnections/connection.php';
 
     // Prepare the SQL statement to fetch data
     try{
-        $stmt = $pdo->prepare("SELECT * FROM savings_options WHERE Active_status='TRUE'");
+        $stmt = $pdo->prepare("SELECT * FROM savings_options WHERE Active_status='TRUE' ORDER BY Period_months DESC");
         
         // Execute the query
         $stmt->execute();
@@ -46,7 +27,7 @@ try {
           $savings_apy = $exists['APY'];
           $interest_earned = $savings_apy/100 * $savings_duration/12 * $savings_amount;
           $amount_back = $interest_earned + $savings_amount;
-          echo "You will earn an interest of Kshs ".number_format($interest_earned,0)." and the total amount to receive back will be Kshs ".number_format($amount_back,0);
+          echo "Interest Kshs ".number_format($interest_earned,0)." and the total payout Kshs ".number_format($amount_back,0);
 
 
     }
