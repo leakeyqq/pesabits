@@ -97,7 +97,8 @@ if(!empty($_POST["loan_amount"])){
 
   curl_setopt_array($curl, array 
   (
-    CURLOPT_URL => 'https://api.binance.com/api/v3/avgPrice?symbol='.$coin_type,
+    //CURLOPT_URL => 'https://api.binance.com/api/v3/avgPrice?symbol='.$coin_type,
+    CURLOPT_URL => 'https://data-api.binance.vision/api/v3/avgPrice?symbol='.$coin_type,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,

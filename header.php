@@ -5,9 +5,9 @@
 </header>
 <div class="topnav" id="myTopnav">
 <a href="/pesabits/index.php" class="active">Home</a>
-<a href="/pesabits/userwallet/balances.php">My wallet</a>
-<a href="#contact">My loans</a>
-<a href="#about">My savings</a>
+<a href="/pesabits/userwallet/balances.php">Crypto wallet</a>
+<a href="#contact">Loans</a>
+<a href="#about">Savings</a>
 <a href="#">Text Us</a>
 
 <?php if(isset($_SESSION['user'])){?>

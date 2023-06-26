@@ -8,9 +8,12 @@
     <a href="#" class="wallet-nav-item">
         <h2>Withdraw</h2>
     </a>
+    <?php //I don't want alot of liquidity to be available online ?>
+    <!--
     <a href="#" class="wallet-nav-item">
         <h2>Swap coins</h2>
     </a>
+-->
     <a href="#" class="wallet-nav-item">
         <h2>Transactions</h2>
     </a>

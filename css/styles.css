@@ -240,6 +240,11 @@ input[type=range]:focus::-ms-fill-upper {
   background: #74A9D8;
 }
 
+.stable-coin-link{
+  text-decoration: none;
+  color: green;
+}
+
 
   
 /*Finished styling range element*/
