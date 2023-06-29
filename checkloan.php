@@ -1,7 +1,6 @@
 <?php
+require 'forms/dbconnections/connection.php';
 //Declaring functions
-
-
 function roundOffsecurity($coins_needed,$collateral_amount){
   //check 1 kshs is worth how many coins
   $_1kshs_token = $coins_needed/$collateral_amount;
@@ -95,30 +94,21 @@ if(!empty($_POST["loan_amount"])){
   $ltv_rate = $_POST["ltv_chosen"];
   $curl = curl_init();
 
-  curl_setopt_array($curl, array 
-  (
-    //CURLOPT_URL => 'https://api.binance.com/api/v3/avgPrice?symbol='.$coin_type,
-    CURLOPT_URL => 'https://data-api.binance.vision/api/v3/avgPrice?symbol='.$coin_type,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'GET',
-  )
-);
+  
+  //Fetch the price of the asset 
+  $stmt = $pdo->prepare("SELECT USD_Price FROM available_digital_currencies WHERE Token_short_name = :condition");
+  $stmt->bindParam(':condition', $coin_type);
+  $stmt->execute();
+  // Fetch the value into a variable
+  $result = $stmt->fetchColumn();
+  // Assign the fetched value to a PHP variable
+  $token_value= $result; //Price of 1 token in usd
 
-  $response = curl_exec($curl);
-
-  curl_close($curl);
-  $result = json_decode($response,true);
-  $token_value = $result["price"]; //Price of 1 token in usd
   $token_value_kshs = $token_value * $kshs_rate; //Price of 1 token in kshs
   $collateral_amount = $loan_amount * (100/$ltv_rate);
   $coins_needed = $collateral_amount / $token_value_kshs;
 
-  $coin_symbol = substr($coin_type, 0, -4);
+  $coin_symbol = $coin_type;
 
   //echo $result["price"]." ".$the_coin;
   if(1==1){

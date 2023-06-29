@@ -2,7 +2,7 @@
 require ('dbconnections/connection.php');
 
 //Check LTV of non stable coins
-            $stmt = $pdo->prepare("SELECT * FROM set_loan_ltv");
+            $stmt = $pdo->prepare("SELECT * FROM set_loan_ltv where stability='non-stable' LIMIT 1");
                     
             // Execute the query
             $stmt->execute();
@@ -12,7 +12,7 @@ require ('dbconnections/connection.php');
             
 
 //Check LTV of stable coins
-            $stmt = $pdo->prepare("SELECT * FROM set_loan_ltv_stableCoins");
+            $stmt = $pdo->prepare("SELECT * FROM set_loan_ltv where stability='stable' LIMIT 1");
                                 
             // Execute the query
             $stmt->execute();

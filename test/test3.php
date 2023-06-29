@@ -1,39 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Toggle Forms</title>
-  <script>
-    function toggleForms() {
-      var form1 = document.getElementById("form1");
-      var form2 = document.getElementById("form2");
+<form class="loan-calculator" id="loan-form-stable-coins" style="display:block;" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <br><div class="form-instructions">
+                <p><b>Loan form</b></p>
+            </div>
+          <label for="loan-amount">Amount to borrow in Kshs.</label><br>
+            <input type="number" id="loanAmount" name="loanAmount" placeholder="Kshs 20,000" inputmode="numeric" autocomplete="off" value="0">
+        
+            <br><br><label for="coin">Select coin to use as collateral</label><br>
+            
+            <select name="collateral-coin" id="coin">
+              <?php
+              foreach($this_coins as $row){
+                if($row['Stability'] == "stable"){
+               echo "<option value='".$row['Token_short_name']."'>".$row['Token_full_name']."</option>";
+                }
+              }
+              ?>
+            </select>
+            
+            <a class="stable-coin-link" style="cursor: pointer;" onclick="toggleForms()">Use non-stable coin instead</a>
+            <br>
+            <?php
+                foreach($this_stableCoins_rows as $row){
+               echo "<br><br><label for='loanltv'>LTV ratio </label><output id='ltvoutput'>".$row['Default_value']."</output><span style='color: rgb(0, 0, 0);'>%. <a href='#aboutltv'>Learn more</a></span><br>";
 
-      if (form1.style.display === "none") {
-        form1.style.display = "block";
-        form2.style.display = "none";
-      } else {
-        form1.style.display = "none";
-        form2.style.display = "block";
-      }
-    }
-  </script>
-</head>
-<body>
-  <a href="#" onclick="toggleForms()">Toggle Forms</a>
+             echo "<input type='range' name='loan-ltv' id='loanltv' value='".$row['Default_value']."' min='".$row['Min']."' max='".$row['Max']."' step='1' oninput='ltvoutput.value = loanltv.value'>";
+            }
+            ?>
 
-  <form id="form1" style="display: block;">
-    <!-- Form 1 content here -->
-    <h2>Form 1</h2>
-    <label for="name1">Name:</label>
-    <input type="text" id="name1" name="name1">
-    <!-- Add more fields as needed -->
-  </form>
+<br><br><div class="collateral-needed">
 
-  <form id="form2" style="display: none;">
-    <!-- Form 2 content here -->
-    <h2>Form 2</h2>
-    <label for="name2">Name:</label>
-    <input type="text" id="name2" name="name2">
-    <!-- Add more fields as needed -->
-  </form>
-</body>
-</html>
+    <span id="collateralNeeded"></span>
+</div>
+            <input type="button" id="borrow" value="Proceed to borrow">
+        </form>
+

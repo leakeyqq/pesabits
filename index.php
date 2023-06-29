@@ -100,13 +100,15 @@ if (isset($_GET['logout'])) {
             <select name="collateral-coin" id="coin">
               <?php
               foreach($this_coins as $row){
+                if($row['Stability'] == "non-stable"){
                echo "<option value='".$row['Token_short_name']."'>".$row['Token_full_name']."</option>";
+                }
               }
               ?>
 
             </select>
             
-            <a class="stable-coin-link" style="cursor: pointer;" onclick="toggleForms()">Check stable coins instead</a>
+            <a class="stable-coin-link" style="cursor: pointer;" onclick="toggleForms()">Use stable coin instead</a>
             
             <br>
 
@@ -130,7 +132,7 @@ if (isset($_GET['logout'])) {
         
         
             
-        
+       
         <form class="loan-calculator" id="loan-form-stable-coins" style="display:none;" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <br><div class="form-instructions">
                 <p><b>Loan form</b></p>
@@ -142,13 +144,15 @@ if (isset($_GET['logout'])) {
             
             <select name="collateral-coin" id="coin">
               <?php
-              foreach($this_stable_coins as $row){
+              foreach($this_coins as $row){
+                if($row['Stability'] == "stable"){
                echo "<option value='".$row['Token_short_name']."'>".$row['Token_full_name']."</option>";
+                }
               }
               ?>
             </select>
             
-            <a class="stable-coin-link" style="cursor: pointer;" onclick="toggleForms()">Check non-stable coins instead</a>
+            <a class="stable-coin-link" style="cursor: pointer;" onclick="toggleForms()">Use non-stable coin instead</a>
             <br>
             <?php
                 foreach($this_stableCoins_rows as $row){

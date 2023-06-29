@@ -1,18 +1,22 @@
 <?php
-
 date_default_timezone_set('Africa/Nairobi');
 
 class UpdatePrices{
+    //Our base currency must have the same value as 1 USD
+    public $base_currency;
     public $digital_currencies = array();
+    
 
     //This function fetches all the available digital currencies from the db
     public function __construct(){
+       
         require '../forms/dbconnections/connection.php';
+        $this->base_currency = "USDT";
 
         $array = array(); // Initialize an empty array
 
             // Execute the SELECT quuery
-            $query = "SELECT Token_short_name FROM available_digital_currencies";
+            $query = "SELECT Token_short_name FROM available_digital_currencies where Stability = 'non-stable'";
             $stmt = $pdo->query($query);
 
             // Fetch all items in the column
@@ -20,10 +24,12 @@ class UpdatePrices{
 
             // Output the fetched items
             foreach ($columnData as $item) {
+                $item = $item.$this->base_currency;
                 $item = '"'.$item.'"';
                 array_push($array, $item);
             }
             $string = implode(',', $array);
+            
 
             $curl = curl_init();
 
@@ -52,6 +58,7 @@ class UpdatePrices{
                 $symbol = $item['symbol'];
                 $price = $item['price'];
 
+             $symbol =  str_replace("USDT", "", $symbol);
                echo "Symbol: $symbol\n";
                echo "Price: $price\n\n";
                 
